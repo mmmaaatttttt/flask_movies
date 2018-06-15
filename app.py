@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_modus import Modus
 
 app = Flask(__name__)
+Modus(app)
 
 
 class Movie:
@@ -47,3 +49,10 @@ def create():
 def show(id):
     found_movie = [movie for movie in movies if movie.id == id][0]
     return render_template("show.html", movie=found_movie)
+
+
+@app.route("/movies/<int:id>", methods=["DELETE"])
+def destroy(id):
+    found_movie = [movie for movie in movies if movie.id == id][0]
+    movies.remove(found_movie)
+    return redirect(url_for("index"))
