@@ -4,7 +4,8 @@
 <h1>Here are some movies!</h1>
 <ul>
   {% for movie in movies %}
-    <li>{{ movie.title }}</li>
+    <li><a href="{{ url_for('show', id=movie.id) }}">{{ movie.title }}</a></li>
   {% endfor %}
 </ul>
+<a href="{{ url_for('new') }}">Add a movie</a>
 {% endblock %}

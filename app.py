@@ -41,3 +41,9 @@ def create():
                       request.form['rating'])
     movies.append(new_movie)
     return redirect(url_for("index"))
+
+
+@app.route("/movies/<int:id>", methods=["GET"])
+def show(id):
+    found_movie = [movie for movie in movies if movie.id == id][0]
+    return render_template("show.html", movie=found_movie)

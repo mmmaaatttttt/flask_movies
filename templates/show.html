@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>HERE IS INFO ON {{ movie.title }}!!</h1>
+  <ul>
+    <li>Title: {{ movie.title }}</li>
+    <li>Runtime: {{ movie.runtime }} minutes</li>
+    <li>Rating: {{ movie.rating }}</li>
+  </ul>
+  <a href="{{ url_for('index') }}">Go back to list of movies</a>
+{% endblock %}
