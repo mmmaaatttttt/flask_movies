@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Add a new movie!</h1>
+  <form action="{{ url_for('create') }}" method="POST">
+    <div>
+      <label for="title">Title:   
+      </label>
+      <input id="title" name="title" type="text" placeholder="Enter a title."/>
+    </div>
+    <div>
+      <label for="runtime">Runtime:    
+      </label>
+      <input id="runtime" name="runtime" type="number" placeholder="How long was it?"/>
+    </div>
+    <div>
+      <label for="rating">Rating:   
+      </label>
+      <input id="rating" name="rating" type="text" placeholder="What was it rated?"/>
+      <input type="submit" value="Add movie!">
+    </div>
+  </form>
+{% endblock %}

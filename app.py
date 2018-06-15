@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -28,3 +28,16 @@ def root():
 @app.route("/movies", methods=["GET"])
 def index():
     return render_template("index.html", movies=movies)
+
+
+@app.route("/movies/new", methods=["GET"])
+def new():
+    return render_template("new.html")
+
+
+@app.route("/movies", methods=["POST"])
+def create():
+    new_movie = Movie(request.form['title'], request.form['runtime'],
+                      request.form['rating'])
+    movies.append(new_movie)
+    return redirect(url_for("index"))
