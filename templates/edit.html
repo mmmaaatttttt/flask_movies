@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Edit a movie!</h1>
+  <form action="{{ url_for('update', id=movie.id) }}?_method=PATCH" method="POST">
+    <div>
+      <label for="title">Title:   
+      </label>
+      <input id="title" name="title" type="text" placeholder="Enter a title." value="{{ movie.title }}"/>
+    </div>
+    <div>
+      <label for="runtime">Runtime:    
+      </label>
+      <input id="runtime" name="runtime" type="number" placeholder="How long was it?" value="{{ movie.runtime }}"/>
+    </div>
+    <div>
+      <label for="rating">Rating:   
+      </label>
+      <input id="rating" name="rating" type="text" placeholder="What was it rated?" value="{{ movie.rating }}"/>
+      <input type="submit" value="Update movie!">
+    </div>
+  </form>
+  <a href="{{ url_for('show', id=movie.id) }}">Go back</a>
+{% endblock %}

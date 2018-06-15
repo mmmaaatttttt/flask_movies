@@ -56,3 +56,18 @@ def destroy(id):
     found_movie = [movie for movie in movies if movie.id == id][0]
     movies.remove(found_movie)
     return redirect(url_for("index"))
+
+
+@app.route("/movies/<int:id>/edit", methods=["GET"])
+def edit(id):
+    found_movie = [movie for movie in movies if movie.id == id][0]
+    return render_template("edit.html", movie=found_movie)
+
+
+@app.route("/movies/<int:id>", methods=["PATCH"])
+def update(id):
+    found_movie = [movie for movie in movies if movie.id == id][0]
+    found_movie.title = request.form['title']
+    found_movie.runtime = request.form['runtime']
+    found_movie.rating = request.form['rating']
+    return redirect(url_for('show', id=found_movie.id))
