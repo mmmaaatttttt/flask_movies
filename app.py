@@ -15,6 +15,16 @@ db = SQLAlchemy(app)
 toolbar = DebugToolbarExtension(app)
 
 
+class Studio(db.Model):
+
+    __tablename__ = "studios"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    start_date = db.Column(db.DateTime)
+    movies = db.relationship("Movie", backref="studio")
+
+
 class Movie(db.Model):
 
     __tablename__ = "movies"
@@ -24,6 +34,7 @@ class Movie(db.Model):
     runtime = db.Column(db.Integer)
     release_year = db.Column(db.Integer)
     rating = db.Column(db.Text)
+    studio_id = db.Column(db.Integer, db.ForeignKey('studios.id'))
 
 
 db.create_all()
@@ -34,26 +45,30 @@ def root():
     return "hello rithm 7!"
 
 
-@app.route("/movies", methods=["GET"])
-def index():
-    return render_template("index.html", movies=Movie.query.all())
+# Movie routes
+@app.route("/studios/<int:studio_id>/movies", methods=["GET"])
+def index(studio_id):
+    studio = Studio.query.get(studio_id)
+    return render_template("index.html", studio=studio)
 
 
-@app.route("/movies/new", methods=["GET"])
-def new():
-    return render_template("new.html")
+@app.route("/studios/<int:studio_id>/movies/new", methods=["GET"])
+def new(studio_id):
+    studio = Studio.query.get(studio_id)
+    return render_template("new.html", studio=studio)
 
 
-@app.route("/movies", methods=["POST"])
-def create():
+@app.route("/studios/<int:studio_id>/movies", methods=["POST"])
+def create(studio_id):
     new_movie = Movie(
         title=request.form['title'],
         runtime=request.form['runtime'],
         release_year=request.form['release_year'],
-        rating=request.form['rating'])
+        rating=request.form['rating'],
+        studio_id=studio_id)
     db.session.add(new_movie)
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("index", studio_id=studio_id))
 
 
 @app.route("/movies/<int:movie_id>", methods=["GET"])
@@ -86,3 +101,23 @@ def update(movie_id):
     db.session.add(found_movie)
     db.session.commit()
     return redirect(url_for('show', movie_id=found_movie.id))
+
+
+# studio routes
+@app.route("/studios", methods=["GET"])
+def studios_index():
+    return render_template("studios_index.html", studios=Studio.query.all())
+
+
+@app.route("/studios/new", methods=["GET"])
+def studios_new():
+    return render_template("studios_new.html")
+
+
+@app.route("/studios", methods=["POST"])
+def studios_create():
+    new_studio = Studio(
+        name=request.form["name"], start_date=request.form["start_date"])
+    db.session.add(new_studio)
+    db.session.commit()
+    return redirect(url_for("studios_index"))
