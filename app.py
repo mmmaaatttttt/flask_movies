@@ -72,13 +72,13 @@ def destroy(movie_id):
 
 @app.route("/movies/<int:movie_id>/edit", methods=["GET"])
 def edit(movie_id):
-    found_movie = found_movie = Movie.query.get_or_404(movie_id)
+    found_movie = Movie.query.get_or_404(movie_id)
     return render_template("edit.html", movie=found_movie)
 
 
 @app.route("/movies/<int:movie_id>", methods=["PATCH"])
 def update(movie_id):
-    found_movie = found_movie = Movie.query.get_or_404(movie_id)
+    found_movie = Movie.query.get_or_404(movie_id)
     found_movie.title = request.form['title']
     found_movie.release_year = int(request.form['release_year'])
     found_movie.runtime = int(request.form['runtime'])
