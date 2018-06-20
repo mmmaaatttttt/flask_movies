@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Add a new movie!</h1>
-  <form action="{{ url_for('create', studio_id=studio.id) }}" method="POST">
+  <h1>Add a new movie for {{ studio.name }}!</h1>
+  <form action="{{ url_for('movies_create', studio_id=studio.id) }}" method="POST">
     <div>
       <label for="title">Title:   
       </label>
@@ -25,5 +25,5 @@
       <input type="submit" value="Add movie!">
     </div>
   </form>
-  <a href="{{ url_for('index', studio_id=studio.id) }}">Go back</a>
+  <a href="{{ url_for('movies_index', studio_id=studio.id) }}">Go back</a>
 {% endblock %}

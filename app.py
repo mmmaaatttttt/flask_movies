@@ -47,19 +47,19 @@ def root():
 
 # Movie routes
 @app.route("/studios/<int:studio_id>/movies", methods=["GET"])
-def index(studio_id):
+def movies_index(studio_id):
     studio = Studio.query.get(studio_id)
-    return render_template("index.html", studio=studio)
+    return render_template("movies/index.html", studio=studio)
 
 
 @app.route("/studios/<int:studio_id>/movies/new", methods=["GET"])
-def new(studio_id):
+def movies_new(studio_id):
     studio = Studio.query.get(studio_id)
-    return render_template("new.html", studio=studio)
+    return render_template("movies/new.html", studio=studio)
 
 
 @app.route("/studios/<int:studio_id>/movies", methods=["POST"])
-def create(studio_id):
+def movies_create(studio_id):
     new_movie = Movie(
         title=request.form['title'],
         runtime=request.form['runtime'],
@@ -68,31 +68,32 @@ def create(studio_id):
         studio_id=studio_id)
     db.session.add(new_movie)
     db.session.commit()
-    return redirect(url_for("index", studio_id=studio_id))
+    return redirect(url_for("movies_index", studio_id=studio_id))
 
 
 @app.route("/movies/<int:movie_id>", methods=["GET"])
-def show(movie_id):
+def movies_show(movie_id):
     found_movie = Movie.query.get_or_404(movie_id)
-    return render_template("show.html", movie=found_movie)
+    return render_template("movies/show.html", movie=found_movie)
 
 
 @app.route("/movies/<int:movie_id>", methods=["DELETE"])
-def destroy(movie_id):
+def movies_destroy(movie_id):
     found_movie = Movie.query.get_or_404(movie_id)
+    studio = found_movie.studio
     db.session.delete(found_movie)
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("movies_index", studio_id=studio.id))
 
 
 @app.route("/movies/<int:movie_id>/edit", methods=["GET"])
-def edit(movie_id):
+def movies_edit(movie_id):
     found_movie = Movie.query.get_or_404(movie_id)
-    return render_template("edit.html", movie=found_movie)
+    return render_template("movies/edit.html", movie=found_movie)
 
 
 @app.route("/movies/<int:movie_id>", methods=["PATCH"])
-def update(movie_id):
+def movies_update(movie_id):
     found_movie = Movie.query.get_or_404(movie_id)
     found_movie.title = request.form['title']
     found_movie.release_year = int(request.form['release_year'])
@@ -100,18 +101,18 @@ def update(movie_id):
     found_movie.rating = request.form['rating']
     db.session.add(found_movie)
     db.session.commit()
-    return redirect(url_for('show', movie_id=found_movie.id))
+    return redirect(url_for('movies_show', movie_id=found_movie.id))
 
 
 # studio routes
 @app.route("/studios", methods=["GET"])
 def studios_index():
-    return render_template("studios_index.html", studios=Studio.query.all())
+    return render_template("studios/index.html", studios=Studio.query.all())
 
 
 @app.route("/studios/new", methods=["GET"])
 def studios_new():
-    return render_template("studios_new.html")
+    return render_template("studios/new.html")
 
 
 @app.route("/studios", methods=["POST"])

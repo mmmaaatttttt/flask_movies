@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1>Edit a movie!</h1>
-  <form action="{{ url_for('update', movie_id=movie.id) }}?_method=PATCH" method="POST">
+  <form action="{{ url_for('movies_update', movie_id=movie.id) }}?_method=PATCH" method="POST">
     <div>
       <label for="title">Title:   
       </label>
@@ -25,5 +25,5 @@
       <input type="submit" value="Update movie!">
     </div>
   </form>
-  <a href="{{ url_for('show', movie_id=movie.id) }}">Go back</a>
+  <a href="{{ url_for('movies_show', movie_id=movie.id) }}">Go back</a>
 {% endblock %}

@@ -8,9 +8,9 @@
     <li>Runtime: {{ movie.runtime }} minutes</li>
     <li>Rating: {{ movie.rating }}</li>
   </ul>
-  <a href="{{ url_for('index') }}">Go back to list of movies</a>
-  <a href="{{ url_for('edit', movie_id=movie.id) }}">Edit the movie</a>
-  <form action="{{ url_for('destroy', movie_id=movie.id) }}?_method=DELETE" method="POST">
+  <a href="{{ url_for('movies_index', studio_id=movie.studio.id) }}">Go back to list of movies</a>
+  <a href="{{ url_for('movies_edit', movie_id=movie.id) }}">Edit the movie</a>
+  <form action="{{ url_for('movies_destroy', movie_id=movie.id) }}?_method=DELETE" method="POST">
     <input type="submit" value="DELETE THIS MOVIE FOREVER">
   </form>
 {% endblock %}
