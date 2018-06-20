@@ -24,6 +24,15 @@
       <input id="rating" name="rating" type="text" placeholder="What was it rated?"/>
       <input type="submit" value="Add movie!">
     </div>
+    <div>
+      <h2>Please select all stars who are in this movie:</h2>
+      {% for star in stars %}
+      <div>
+        <input type="checkbox" name="stars" id="star_{{ star.id }}" value="{{ star.id }}">
+        <label for="star_{{ star.id }}">{{ star.first_name }} {{ star.last_name }}</label>
+      </div>
+      {% endfor %}
+    </div>
   </form>
   <a href="{{ url_for('movies_index', studio_id=studio.id) }}">Go back</a>
 {% endblock %}

@@ -37,17 +37,9 @@ class Movie(db.Model):
     studio_id = db.Column(db.Integer, db.ForeignKey('studios.id'))
 
 
-roles = db.Table("roles",
-                 db.Column(
-                     'movie_id',
-                     db.Integer,
-                     db.ForeignKey('movies.id'),
-                     primary_key=True),
-                 db.Column(
-                     'star_id',
-                     db.Integer,
-                     db.ForeignKey('stars.id'),
-                     primary_key=True))
+roles = db.Table("roles", db.Column('id', db.Integer, primary_key=True),
+                 db.Column('movie_id', db.Integer, db.ForeignKey('movies.id')),
+                 db.Column('star_id', db.Integer, db.ForeignKey('stars.id')))
 
 
 class Star(db.Model):
@@ -57,8 +49,7 @@ class Star(db.Model):
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text)
     birth_date = db.Column(db.DateTime, nullable=False)
-    movies = db.relationship(
-        "Movie", secondary=roles, backref=db.backref("stars"))
+    movies = db.relationship("Movie", secondary="roles", backref="stars")
 
 
 db.create_all()
@@ -79,7 +70,8 @@ def movies_index(studio_id):
 @app.route("/studios/<int:studio_id>/movies/new", methods=["GET"])
 def movies_new(studio_id):
     studio = Studio.query.get(studio_id)
-    return render_template("movies/new.html", studio=studio)
+    return render_template(
+        "movies/new.html", studio=studio, stars=Star.query.all())
 
 
 @app.route("/studios/<int:studio_id>/movies", methods=["POST"])
@@ -90,6 +82,8 @@ def movies_create(studio_id):
         release_year=request.form['release_year'],
         rating=request.form['rating'],
         studio_id=studio_id)
+    star_ids = request.form.getlist('stars')
+    new_movie.stars = Star.query.filter(Star.id.in_(star_ids)).all()
     db.session.add(new_movie)
     db.session.commit()
     return redirect(url_for("movies_index", studio_id=studio_id))
