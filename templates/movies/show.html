@@ -8,6 +8,12 @@
     <li>Runtime: {{ movie.runtime }} minutes</li>
     <li>Rating: {{ movie.rating }}</li>
   </ul>
+  <h2>Here are the stars that were in this movie:</h2>
+  <ul>
+    {% for star in movie.stars %}
+      <li>{{ star.first_name }} {{ star.last_name }} ({{ star.birth_date }})</li>
+    {% endfor %}
+  </ul>
   <a href="{{ url_for('movies_index', studio_id=movie.studio.id) }}">Go back to list of movies</a>
   <a href="{{ url_for('movies_edit', movie_id=movie.id) }}">Edit the movie</a>
   <form action="{{ url_for('movies_destroy', movie_id=movie.id) }}?_method=DELETE" method="POST">

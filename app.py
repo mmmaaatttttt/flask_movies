@@ -37,6 +37,30 @@ class Movie(db.Model):
     studio_id = db.Column(db.Integer, db.ForeignKey('studios.id'))
 
 
+roles = db.Table("roles",
+                 db.Column(
+                     'movie_id',
+                     db.Integer,
+                     db.ForeignKey('movies.id'),
+                     primary_key=True),
+                 db.Column(
+                     'star_id',
+                     db.Integer,
+                     db.ForeignKey('stars.id'),
+                     primary_key=True))
+
+
+class Star(db.Model):
+
+    __tablename__ = "stars"
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.Text, nullable=False)
+    last_name = db.Column(db.Text)
+    birth_date = db.Column(db.DateTime, nullable=False)
+    movies = db.relationship(
+        "Movie", secondary=roles, backref=db.backref("stars"))
+
+
 db.create_all()
 
 
