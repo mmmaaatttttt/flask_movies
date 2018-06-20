@@ -34,12 +34,15 @@ class Movie(db.Model):
     runtime = db.Column(db.Integer)
     release_year = db.Column(db.Integer)
     rating = db.Column(db.Text)
-    studio_id = db.Column(db.Integer, db.ForeignKey('studios.id'))
+    studio_id = db.Column(db.Integer,
+                          db.ForeignKey('studios.id', ondelete="CASCADE"))
 
 
 roles = db.Table("roles", db.Column('id', db.Integer, primary_key=True),
-                 db.Column('movie_id', db.Integer, db.ForeignKey('movies.id')),
-                 db.Column('star_id', db.Integer, db.ForeignKey('stars.id')))
+                 db.Column('movie_id', db.Integer,
+                           db.ForeignKey('movies.id', ondelete="CASCADE")),
+                 db.Column('star_id', db.Integer,
+                           db.ForeignKey('stars.id', ondelete="CASCADE")))
 
 
 class Star(db.Model):
